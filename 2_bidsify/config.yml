@@ -1,0 +1,77 @@
+images:
+  t1_ses1:
+    in: ../1_download_extract/merged/Flash_Structural_Session_1/sub-{subject}/Flash_Structural_Session_1.nii.gz
+    out: bids_ses-1/sub-{subject}/anat/sub-{subject}_acq-FLASH_T1w.nii.gz
+    tmin: 0
+    tsize: 1
+  t1_ses2:
+    in: ../1_download_extract/merged/Flash_Structural_Session_2/sub-{subject}/Flash_Structural_Session_2.nii.gz
+    out: bids_ses-2/sub-{subject}/anat/sub-{subject}_acq-FLASH_T1w.nii.gz
+    tmin: 0
+    tsize: 1
+  dwi:
+    in: ../1_download_extract/merged/DWI/sub-{subject}/DWI_{dir}_{acq}.nii.gz
+    out: bids_ses-2/sub-{subject}/dwi/sub-{subject}_acq-{acq}_dir-{dir}_dwi.nii.gz
+    tmin: 0
+    tsize: -1
+  t2_avg:
+    in: ../1_download_extract/merged/Hippocampal_Subfield_Segmentation/sub-{subject}/Main_Sample.nii.gz
+    out: bids_ses-2/sub-{subject}/anat/sub-{subject}_acq-TSEavg_T2w.nii.gz
+    tmin: 1
+    tsize: 1
+  subfields:
+    in: ../1_download_extract/merged/Hippocampal_Subfield_Segmentation/sub-{subject}/Main_Sample.nii.gz
+    out: bids_ses-2/derivatives/sub-{subject}/anat/sub-{subject}_space-T2w_desc-subfields_dseg.nii.gz
+    tmin: 0
+    tsize: 1
+  wholebrain_mag_echo1:
+    in: ../1_download_extract/merged/Whole_Brain_Resting_state/sub-{subject}/WB_Fieldmap_Magnitude.nii.gz
+    out: bids_ses-1/sub-{subject}/fmap/sub-{subject}_acq-wholebrain_magnitude1.nii.gz
+    tmin: 0
+    tsize: 1
+  wholebrain_mag_echo2:
+    in: ../1_download_extract/merged/Whole_Brain_Resting_state/sub-{subject}/WB_Fieldmap_Magnitude.nii.gz
+    out: bids_ses-1/sub-{subject}/fmap/sub-{subject}_acq-wholebrain_magnitude2.nii.gz
+    tmin: 1
+    tsize: 1
+  wholebrain_phasediff:
+    in: ../1_download_extract/merged/Whole_Brain_Resting_state/sub-{subject}/WB_Fieldmap_Phase.nii.gz
+    out: bids_ses-1/sub-{subject}/fmap/sub-{subject}_acq-wholebrain_phasediff.nii.gz
+    tmin: 0
+    tsize: 1
+
+  partialvol_mag_echo1:
+    in: ../1_download_extract/merged/Partial_Vol_Hi_Res_Resting_State/sub-{subject}/PV_Fieldmap_Magnitude.nii.gz
+    out: bids_ses-1/sub-{subject}/fmap/sub-{subject}_acq-partialvol_magnitude1.nii.gz
+    tmin: 0
+    tsize: 1
+  partialvol_mag_echo2:
+    in: ../1_download_extract/merged/Partial_Vol_Hi_Res_Resting_State/sub-{subject}/PV_Fieldmap_Magnitude.nii.gz
+    out: bids_ses-1/sub-{subject}/fmap/sub-{subject}_acq-partialvol_magnitude2.nii.gz
+    tmin: 1
+    tsize: 1
+  partialvol_phasediff:
+    in: ../1_download_extract/merged/Partial_Vol_Hi_Res_Resting_State/sub-{subject}/PV_Fieldmap_Phase.nii.gz
+    out: bids_ses-1/sub-{subject}/fmap/sub-{subject}_acq-partialvol_phasediff.nii.gz
+    tmin: 0
+    tsize: 1
+
+bold_images:
+  partialvol_bold:
+    in: ../1_download_extract/merged/Partial_Vol_Hi_Res_Resting_State/sub-{subject}/Partial_Volume_Resting_State.nii.gz
+    out: bids_ses-1/sub-{subject}/func/sub-{subject}_task-rest_acq-partialvol_bold.nii.gz
+    pixdim: 
+      - 1.5
+      - 1.5 
+      - 1.5 
+      - 3.65
+  wholebrain_bold:
+    in: ../1_download_extract/merged/Whole_Brain_Resting_state/sub-{subject}/Whole_Brain_Resting_State.nii.gz
+    out: bids_ses-1/sub-{subject}/func/sub-{subject}_task-rest_acq-wholebrain_bold.nii.gz
+    pixdim: 
+      - 3.0 
+      - 3.0 
+      - 3.0 
+      - 3.36
+
+

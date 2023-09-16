@@ -1,0 +1,59 @@
+configfile: 'config.yml'
+
+def get_targets():
+    targets=[]
+    for img in config['images'].keys():
+        wildcards = glob_wildcards(config['images'][img]['in'])
+        targets.extend(expand(config['images'][img]['out'],zip,**wildcards._asdict()))
+    for img in config['bold_images'].keys():
+        wildcards = glob_wildcards(config['bold_images'][img]['in'])
+        targets.extend(expand(config['bold_images'][img]['out'],zip,**wildcards._asdict()))
+
+    return targets
+
+rule all:
+    input: get_targets()
+
+def get_cmd(img):
+    cmds=list()
+
+    tmin=config['images'][img]['tmin']
+    tsize=config['images'][img]['tsize']
+
+    cmds.append(f'fslroi {{input}} {{output}} {tmin} {tsize}')
+    if 'pixdim' in config['images'][img]:
+        pixdim=config['images'][img]['pixdim']
+        cmds.append(f'fslchpixdim {{output}} {pixdim}')
+
+    return " && ".join(cmds)
+
+
+    
+for img in config['images'].keys():
+
+    rule:
+        name: f'to_bids_{img}'
+        input: config['images'][img]['in']
+        output: config['images'][img]['out']
+        container: '/project/6050199/akhanf/singularity/bids-apps/fsl_6.0.4_cuda9.1.sif'
+        shell:
+            get_cmd(img)
+
+
+for img in config['bold_images'].keys():
+    rule:
+        name: f'to_bids_{img}'
+        input: config['bold_images'][img]['in']
+        params:
+            pixdim=config['bold_images'][img]['pixdim']
+        output: config['bold_images'][img]['out']
+        run:
+            import nibabel as nib
+            img = nib.load(input[0])
+            header = img.header
+            header['pixdim'][1:5] = params.pixdim 
+            nib.Nifti1Image(img.get_fdata(),img.affine,header).to_filename(output[0])
+                
+
+            
+

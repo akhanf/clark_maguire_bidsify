@@ -1,0 +1,88 @@
+import os
+from pathlib import Path
+from glob import glob
+
+configfile: 'config.yml'
+
+tmp=Path(os.environ.get('SLURM_TMPDIR','/tmp'))
+
+def get_subjects_list(sequence_name):
+    start=config['zips'][sequence_name]['subj_start']
+    end=config['zips'][sequence_name]['subj_end']
+    return [f'{i}' for i in range(start,end+1)]
+
+    
+def get_targets():
+    targets=[]
+    for name in config['zips'].keys():
+        targets.extend( expand('merged/{name}/sub-{subject}',
+                    name=name,
+                    subject=get_subjects_list(name)))
+    return targets
+
+rule all:
+    input:
+         get_targets()
+                                                
+
+rule download:
+    output: 'zips/{name}.zip'
+    params:
+        url=lambda wildcards: config['zips'][wildcards.name]
+    shell:
+        'wget -O {output} {params.url}'
+
+
+#DWI/9/DWI_PA_B2500/anon_fMP01478-0005-00060-000060-01.nii
+#Whole Brain Resting State/99/Whole_Brain_Resting_State/anon_fMQ03287-0004-00201-000201-01.nii
+#DWI/99/DWI_PA_B1000/anon_fMQ03292-0003-00005-000005-01.nii
+
+
+checkpoint unzip_to_tmp:
+    input: 'zips/{name}.zip'
+    output: directory(tmp / 'unzipped/{name}')
+    shell:
+        'unzip -d {output} {input}'
+    
+
+
+def get_merge_cmd(wildcards,input,output):
+    unzipped = checkpoints.unzip_to_tmp.get(**wildcards).output[0]
+    nii_wildcards =  glob_wildcards(Path(unzipped) / config['zips'][wildcards.name]['nii'])
+    
+    sequences = list(set(getattr(nii_wildcards, 'sequence')))
+    subject = wildcards.subject
+
+    #create {output}/{sequence}.nii.gz
+
+    out_dict={}
+    cmds = []
+    
+    cmds.append(f'mkdir -p {output}')
+    if len(sequences)>0:
+        for sequence in sequences:
+            globpath=Path(unzipped) / expand(config['zips'][wildcards.name]['nii'],
+                                sequence=sequence,
+                                folder='*',
+                                subject=subject,
+                                filename='*')[0]
+            files = sorted(glob(str(globpath)))
+            if len(files)>0:
+                files_quoted=' '.join([ f"'{nii}'" for nii in  files])
+                seq_no_blanks = "_".join(sequence.split())
+                cmds.append(f"fslmerge -t {output}/{seq_no_blanks}.nii.gz {files_quoted}")
+                
+
+    return ' && '.join(cmds)
+
+rule merge_nii_subj:
+    input:
+        unzipped=lambda wildcards: checkpoints.unzip_to_tmp.get(**wildcards).output[0]
+    params:
+        cmd=get_merge_cmd
+    output: directory('merged/{name}/sub-{subject}')
+    container: '/project/6050199/akhanf/singularity/bids-apps/fsl_6.0.4_cuda9.1.sif'
+    shell:
+        '{params.cmd}'
+
+

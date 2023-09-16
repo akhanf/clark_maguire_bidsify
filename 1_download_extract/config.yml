@@ -1,0 +1,63 @@
+zips:
+  DWI: 
+    url: https://datadryad.org/stash/downloads/file_stream/2469299
+    nii: '{folder}/{subject}/{sequence}/{filename}.nii'
+    subj_start: 1
+    subj_end: 217
+
+
+
+  Whole_Brain_Resting_state: 
+    url: https://datadryad.org/stash/downloads/file_stream/2469300
+    nii: '{folder}/{subject}/{sequence}/{filename}.nii'
+    subj_start: 1
+    subj_end: 217
+
+
+    
+  Partial_Vol_Hi_Res_Resting_State: 
+    url: https://datadryad.org/stash/downloads/file_stream/2469301
+    nii: '{folder}/{subject}/{sequence}/{filename}.nii'
+    subj_start: 1
+    subj_end: 217
+
+   
+  Flash_Structural_Session_1: 
+    url: https://datadryad.org/stash/downloads/file_stream/2469297
+    nii: '{sequence}/{subject}/{filename}.nii'
+    subj_start: 1
+    subj_end: 217
+
+
+  Flash_Structural_Session_2: 
+    url: https://datadryad.org/stash/downloads/file_stream/2469298
+    nii: '{sequence}/{subject}/{filename}.nii'
+    subj_start: 1
+    subj_end: 217
+
+
+   
+  MPM_1: 
+    url: https://datadryad.org/stash/downloads/file_stream/2469303
+    nii: '{folder}/{subject}/{sequence}/{filename}.nii'
+    subj_start: 1
+    subj_end: 108
+
+  
+  MPM_2: 
+    url: https://datadryad.org/stash/downloads/file_stream/2469304
+    nii: '{folder}/{subject}/{sequence}/{filename}.nii'
+    subj_start: 109
+    subj_end: 212
+
+  Hippocampal_Subfield_Segmentation:
+    url: https://datadryad.org/stash/downloads/file_stream/2469296
+    nii: '{folder}/{sequence}/{subject}/{filename}.nii'
+    subj_start: 1
+    subj_end: 217
+
+
+
+
+
+
